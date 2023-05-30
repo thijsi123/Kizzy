@@ -16,10 +16,6 @@ import android.content.Intent
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.my.kizzy.feature_rpc_base.AppUtils
@@ -31,8 +27,6 @@ import com.my.kizzy.navigation.Routes
 import com.my.kizzy.preference.Prefs
 import com.my.kizzy.resources.R
 
-private const val MEDIA_RPC_INVERT_NAME_DETAILS = "media_rpc_invert_name_details"
-
 @Composable
 fun homeFeaturesProvider(
     navigateTo: (String) -> Unit,
@@ -41,8 +35,6 @@ fun homeFeaturesProvider(
     userVerified: Boolean
 ): List<HomeFeature> {
     val ctx = LocalContext.current
-    var isInvertNameDetailsEnabled by remember { mutableStateOf(Prefs[MEDIA_RPC_INVERT_NAME_DETAILS, false]) }
-
     return listOf(
         HomeFeature(
             title = "App Detection",
@@ -59,9 +51,8 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
                     ctx.startService(Intent(ctx, AppDetectionService::class.java))
-                } else {
+                } else
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
-                }
             },
             shape = RoundedCornerShape(20.dp, 44.dp, 20.dp, 44.dp),
             tooltipText = ToolTipContent.APP_DETECTION_DOCS,
@@ -81,9 +72,8 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.startService(Intent(ctx, MediaRpcService::class.java))
-                } else {
+                } else
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
-                }
             },
             shape = RoundedCornerShape(44.dp, 20.dp, 44.dp, 20.dp),
             tooltipText = ToolTipContent.MEDIA_RPC_DOCS,
@@ -107,9 +97,8 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.startService(intent)
-                } else {
+                } else
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
-                }
             },
             shape = RoundedCornerShape(44.dp, 20.dp, 44.dp, 20.dp),
             showSwitch = Prefs[Prefs.LAST_RUN_CUSTOM_RPC, ""].isNotEmpty(),
@@ -134,9 +123,8 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.startService(intent)
-                } else {
+                } else
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
-                }
             },
             shape = RoundedCornerShape(20.dp, 44.dp, 20.dp, 44.dp),
             showSwitch = Prefs[Prefs.LAST_RUN_CONSOLE_RPC, ""].isNotEmpty(),
@@ -153,25 +141,13 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.startService(Intent(ctx, ExperimentalRpc::class.java))
-                } else {
+                } else
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
-                }
             },
             shape = RoundedCornerShape(20.dp, 44.dp, 20.dp, 44.dp),
             showSwitch = hasUsageAccess.value && hasNotificationAccess.value && userVerified,
             tooltipText = ToolTipContent.EXPERIMENTAL_RPC_DOCS,
             featureDocsLink = ToolTipContent.EXPERIMENTAL_RPC_DOCS_LINK
-        ),
-        HomeFeature(
-            title = "Invert Name Details requires rpc restart",
-            icon = R.drawable.ic_invert_name_details,
-            isChecked = isInvertNameDetailsEnabled,
-            onCheckedChange = {
-                isInvertNameDetailsEnabled = !isInvertNameDetailsEnabled
-                Prefs[MEDIA_RPC_INVERT_NAME_DETAILS] = isInvertNameDetailsEnabled
-            },
-            shape = RoundedCornerShape(44.dp, 20.dp, 44.dp, 20.dp),
-            showSwitch = true
         ),
         HomeFeature(
             title = "Coming Soon",
