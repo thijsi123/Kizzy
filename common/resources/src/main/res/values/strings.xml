@@ -89,4 +89,10 @@
     <string name="set_previous_run_config_in_custom_rpc">Set Previous Run config to Custom Rpc Fields</string>
     <string name="set_previous_run_config_in_custom_rpc_desc">Automatically set fields in custom rpc from the last run rpc</string>
     <string name="clear_all_fields">Clear All Fields</string>
+
+    <string name="invert_details_and_activityname" translatable="false">Invert Activity name &amp; details</string>
+    <string name="invert_details_and_activityname_desc" translatable="false">Sets the activity name in place for details and vice versa \nfor apps, media &amp; experimental rpc\n</string>
+
+
+
 </resources>

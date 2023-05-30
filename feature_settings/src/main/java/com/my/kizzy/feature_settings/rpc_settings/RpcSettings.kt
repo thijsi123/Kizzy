@@ -11,7 +11,7 @@
  */
 
 package com.my.kizzy.feature_settings.rpc_settings
-
+import android.util.Log
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -62,6 +62,12 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
     var customActivityType by remember {
         mutableStateOf(Prefs[Prefs.CUSTOM_ACTIVITY_TYPE, 0].toString())
     }
+
+
+    var customSwitchState by remember { mutableStateOf(Prefs[Prefs.INVERT_DETAILS_AND_ACTIVITYNAME, false]) }
+
+
+
     var showActivityTypeDialog by remember {
         mutableStateOf(false)
     }
@@ -133,6 +139,28 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
                     Prefs[Prefs.APPLY_FIELDS_FROM_LAST_RUN_RPC] = setLastRunRpcConfigOption
                 }
             }
+
+            item {
+                PreferenceSwitch(
+                    title = stringResource(id = R.string.invert_details_and_activityname),
+                    description = stringResource(id = R.string.invert_details_and_activityname_desc),
+                    icon = Icons.Default.SwapVert,
+                    isChecked = customSwitchState,
+                ) {
+                    customSwitchState = !customSwitchState
+                    Prefs[Prefs.INVERT_DETAILS_AND_ACTIVITYNAME] = customSwitchState
+
+                    // Enable or disable the INVERT_DETAILS_AND_ACTIVITYNAME functionality based on the switch state
+                    if (customSwitchState) {
+                        Prefs[Prefs.INVERT_DETAILS_AND_ACTIVITYNAME] = true
+                        Log.d("RpcSettings", "switch on")
+                    } else {
+                        Prefs[Prefs.INVERT_DETAILS_AND_ACTIVITYNAME] = false
+                        Log.d("RpcSettings", "switch off")
+                    }
+                }
+            }
+
             item {
                 Subtitle(text = stringResource(id = R.string.advance_settings))
             }
@@ -147,6 +175,14 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
                     Prefs[Prefs.RPC_USE_LOW_RES_ICON] = isLowResIconsEnabled
                 }
             }
+
+
+
+            // Print the state based on the variable value
+            val stateText = if (customSwitchState) "Enabled" else "Disabled"
+            Log.d("RpcSettings", "Variable state: $stateText")
+
+
             item {
                 SettingItem(
                     title = stringResource(id = R.string.delete_saved_icon_urls),
