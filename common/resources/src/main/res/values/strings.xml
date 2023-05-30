@@ -92,6 +92,8 @@
 
     <string name="invert_details_and_activityname" translatable="false">Invert Activity name &amp; details</string>
     <string name="invert_details_and_activityname_desc" translatable="false">Sets the activity name in place for details and vice versa \nfor apps, media &amp; experimental rpc\n</string>
+    <string name="invert_details_and_activityname_desc" translatable="false">Sets the activity name in place for details and vice versa \nfor apps, media &amp; experimental rpc\n</string>
+    <string name="invert_details_and_activityname_desc_placeholder" translatable="false">Sets the activity name in place for details and vice versa \nfor media rpc\n</string>
 
 
 

@@ -75,7 +75,8 @@ class MediaRpcService : Service() {
                 )
                 val rpcButtonsString = Prefs[Prefs.RPC_BUTTONS_DATA, "{}"]
                 val rpcButtons = Json.decodeFromString<RpcButtons>(rpcButtonsString)
-                // Update the name and details based on the customSwitchState
+
+                
                 val tempName = if (customSwitchState) playingMedia.details?.ifEmpty { "YouTube" } else playingMedia.name.ifEmpty { "YouTube" }
                 val name = tempName ?: "YouTube"
                 val details = if (customSwitchState) playingMedia.name.ifEmpty { "YouTube" } else playingMedia.details

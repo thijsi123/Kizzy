@@ -143,14 +143,14 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
             item {
                 PreferenceSwitch(
                     title = stringResource(id = R.string.invert_details_and_activityname),
-                    description = stringResource(id = R.string.invert_details_and_activityname_desc),
+                    description = stringResource(id = R.string.invert_details_and_activityname_desc_placeholder),
                     icon = Icons.Default.SwapVert,
                     isChecked = customSwitchState,
                 ) {
                     customSwitchState = !customSwitchState
                     Prefs[Prefs.INVERT_DETAILS_AND_ACTIVITYNAME] = customSwitchState
 
-                    // Enable or disable the INVERT_DETAILS_AND_ACTIVITYNAME functionality based on the switch state
+
                     if (customSwitchState) {
                         Prefs[Prefs.INVERT_DETAILS_AND_ACTIVITYNAME] = true
                         Log.d("RpcSettings", "switch on")
