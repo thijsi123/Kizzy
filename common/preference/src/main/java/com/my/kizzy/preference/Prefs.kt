@@ -111,4 +111,5 @@ object Prefs {
     const val PALETTE_STYLE = "palette_style"
 
     const val APPLY_FIELDS_FROM_LAST_RUN_RPC = "enable_setting_from_last_config"
+    const val INVERT_DETAILS_AND_ACTIVITYNAME = "INVERT_DETAILS_AND_ACTIVITYNAME"
 }

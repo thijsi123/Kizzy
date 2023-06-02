@@ -18,6 +18,9 @@ import android.content.Intent
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.my.kizzy.data.get_current_data.media.GetCurrentPlayingMedia
 import com.my.kizzy.data.rpc.Constants
 import com.my.kizzy.data.rpc.KizzyRPC
@@ -50,6 +53,9 @@ class MediaRpcService : Service() {
 
     private var wakeLock: WakeLock? = null
 
+
+    private var customSwitchState by mutableStateOf(Prefs[Prefs.INVERT_DETAILS_AND_ACTIVITYNAME, false])
+
     @SuppressLint("WakelockTimeout")
     override fun onCreate() {
         super.onCreate()
@@ -69,12 +75,18 @@ class MediaRpcService : Service() {
                 )
                 val rpcButtonsString = Prefs[Prefs.RPC_BUTTONS_DATA, "{}"]
                 val rpcButtons = Json.decodeFromString<RpcButtons>(rpcButtonsString)
+
+                
+                val tempName = if (customSwitchState) playingMedia.details?.ifEmpty { "YouTube" } else playingMedia.name.ifEmpty { "YouTube" }
+                val name = tempName ?: "YouTube"
+                val details = if (customSwitchState) playingMedia.name.ifEmpty { "YouTube" } else playingMedia.details
+
                 when (kizzyRPC.isRpcRunning()) {
                     true -> {
                         logger.d("MediaRPC", "Updating Rpc")
                         kizzyRPC.updateRPC(
-                            name = playingMedia.name.ifEmpty { "YouTube" },
-                            details = playingMedia.details,
+                            name = name,
+                            details = details,
                             state = playingMedia.state,
                             large_image = playingMedia.largeImage,
                             small_image = playingMedia.smallImage,
@@ -84,8 +96,8 @@ class MediaRpcService : Service() {
                     }
                     false -> {
                         kizzyRPC.apply {
-                            setName(playingMedia.name.ifEmpty { "YouTube" })
-                            setDetails(playingMedia.details)
+                            setName(name)
+                            setDetails(details)
                             setStatus(Constants.DND)
                             if (Prefs[Prefs.USE_RPC_BUTTONS, false]) {
                                 with(rpcButtons) {
