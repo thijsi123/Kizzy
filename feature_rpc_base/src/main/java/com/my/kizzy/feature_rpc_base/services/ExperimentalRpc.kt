@@ -82,36 +82,63 @@ class ExperimentalRpc: Service() {
                     val name = tempName ?: " "
                     val details =
                         if (customSwitchState) collectedData.name.ifEmpty {""} else collectedData.details
-                    if (kizzyRPC.isRpcRunning()) {
-                        logger.d("ExperimentalRPC", "Updating Rpc")
-                        kizzyRPC.updateRPC(
-                            name = name,
-                            details = details,
-                            state = collectedData.state,
-                            large_image = collectedData.largeImage,
-                            small_image = collectedData.smallImage,
-                            enableTimestamps = Prefs[MEDIA_RPC_ENABLE_TIMESTAMPS, false],
-                            time = System.currentTimeMillis()
-                        )
-                    } else {
-                        kizzyRPC.apply {
-                            setName(name)
-                            setStartTimestamps(System.currentTimeMillis())
-                            setDetails(details)
-                            setStatus(Constants.DND)
-                            setSmallImage(collectedData.smallImage)
-                            setLargeImage(collectedData.largeImage)
-                            if (Prefs[Prefs.USE_RPC_BUTTONS, false]) {
-                                with(rpcButtons) {
-                                    setButton1(button1.takeIf { it.isNotEmpty() })
-                                    setButton1URL(button1Url.takeIf { it.isNotEmpty() })
-                                    setButton2(button2.takeIf { it.isNotEmpty() })
-                                    setButton2URL(button2Url.takeIf { it.isNotEmpty() })
+                    if (kizzyRPC.isRpcRunning() && customSwitchState) {
+                        val name = collectedData.details?.ifEmpty { "" } ?: ""
+                        val details = collectedData.name.ifEmpty { "" }
+                        if (kizzyRPC.isRpcRunning()) {
+                            logger.d("ExperimentalRPC", "Updating Rpc")
+                            kizzyRPC.updateRPC(
+                                name = name,
+                                details = details,
+                                state = collectedData.state,
+                                large_image = collectedData.largeImage,
+                                small_image = collectedData.smallImage,
+                                enableTimestamps = Prefs[MEDIA_RPC_ENABLE_TIMESTAMPS, false],
+                                time = System.currentTimeMillis()
+                            )
+                        } else {
+                            kizzyRPC.apply {
+                                setName(name)
+                                setStartTimestamps(System.currentTimeMillis())
+                                setDetails(details)
+                                setStatus(Constants.DND)
+                                setSmallImage(collectedData.smallImage)
+                                setLargeImage(collectedData.largeImage)
+                                if (Prefs[Prefs.USE_RPC_BUTTONS, false]) {
+                                    with(rpcButtons) {
+                                        setButton1(button1.takeIf { it.isNotEmpty() })
+                                        setButton1URL(button1Url.takeIf { it.isNotEmpty() })
+                                        setButton2(button2.takeIf { it.isNotEmpty() })
+                                        setButton2URL(button2Url.takeIf { it.isNotEmpty() })
+                                    }
                                 }
+                                build()
                             }
-                            build()
+                        }
+                    } else {
+                        if (kizzyRPC.isRpcRunning()) {
+                            kizzyRPC.updateRPC(collectedData)
+                        } else {
+                            kizzyRPC.apply {
+                                setName(collectedData.name)
+                                setStartTimestamps(System.currentTimeMillis())
+                                setDetails(collectedData.details)
+                                setStatus(Constants.DND)
+                                setSmallImage(collectedData.smallImage)
+                                setLargeImage(collectedData.largeImage)
+                                if (Prefs[Prefs.USE_RPC_BUTTONS, false]) {
+                                    with(rpcButtons) {
+                                        setButton1(button1.takeIf { it.isNotEmpty() })
+                                        setButton1URL(button1Url.takeIf { it.isNotEmpty() })
+                                        setButton2(button2.takeIf { it.isNotEmpty() })
+                                        setButton2URL(button2Url.takeIf { it.isNotEmpty() })
+                                    }
+                                }
+                                build()
+                            }
                         }
                     }
+
                     manager.notify(2292,Notification.Builder(this@ExperimentalRpc, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_dev_rpc)
                         .setContentTitle(collectedData.name)
