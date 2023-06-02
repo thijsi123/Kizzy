@@ -143,7 +143,7 @@ fun RpcSettings(onBackPressed: () -> Boolean) {
             item {
                 PreferenceSwitch(
                     title = stringResource(id = R.string.invert_details_and_activityname),
-                    description = stringResource(id = R.string.invert_details_and_activityname_desc_placeholder),
+                    description = stringResource(id = R.string.invert_details_and_activityname_desc),
                     icon = Icons.Default.SwapVert,
                     isChecked = customSwitchState,
                 ) {
