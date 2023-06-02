@@ -77,14 +77,11 @@ class ExperimentalRpc: Service() {
                     logger.e(TAG, "Starting Flow")
                 }.collect { collectedData ->
                     logger.i(TAG, "Flow Data Received")
-                    val rpcButtonsString = Prefs[Prefs.RPC_BUTTONS_DATA, "{}"]
-                    val rpcButtons = Json.decodeFromString<RpcButtons>(rpcButtonsString)
                     val tempName =
-                        if (customSwitchState) collectedData.details?.ifEmpty { "YouTube" } else collectedData.name.ifEmpty { "YouTube" }
+                        if (customSwitchState) collectedData.details?.ifEmpty {""} else collectedData.name.ifEmpty {""}
                     val name = tempName ?: "YouTube"
                     val details =
-                        if (customSwitchState) collectedData.name.ifEmpty { "YouTube" } else collectedData.details
-
+                        if (customSwitchState) collectedData.name.ifEmpty {""} else collectedData.details
                     if (kizzyRPC.isRpcRunning()) {
                         logger.d("ExperimentalRPC", "Updating Rpc")
                         kizzyRPC.updateRPC(
