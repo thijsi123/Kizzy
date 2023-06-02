@@ -79,7 +79,7 @@ class ExperimentalRpc: Service() {
                     logger.i(TAG, "Flow Data Received")
                     val tempName =
                         if (customSwitchState) collectedData.details?.ifEmpty {""} else collectedData.name.ifEmpty {""}
-                    val name = tempName ?: "YouTube"
+                    val name = tempName ?: " "
                     val details =
                         if (customSwitchState) collectedData.name.ifEmpty {""} else collectedData.details
                     if (kizzyRPC.isRpcRunning()) {
